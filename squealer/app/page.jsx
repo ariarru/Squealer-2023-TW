@@ -7,7 +7,7 @@ import PostCard from './components/media/PostCard'
 import LikeButton from './components/reaction/LikeButton'
 import DisLikeButton from './components/reaction/DisLikeButton'
 
-export default async function Home () {
+export default async function Home() {
   // Crea un oggetto supabase utilizzando createServerComponentClient e passa l'oggetto cookies come argomento
   const supabase = createServerComponentClient({ cookies })
 
