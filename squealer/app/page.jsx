@@ -2,7 +2,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import AuthButtonServer from './auth/auth-components/auth-button-server'
 import { redirect } from 'next/navigation'
-import NewTweet from './new-tweet'
+// import NewTweet from './new-tweet'
 import PostCard from './components/media/PostCard'
 import LikeButton from './components/reaction/LikeButton'
 import DisLikeButton from './components/reaction/DisLikeButton'
@@ -48,7 +48,7 @@ export default async function Home() {
   return (
     <layout>
       <AuthButtonServer />
-      <NewTweet />
+      {/* <NewTweet /> */}
       {squeals?.data?.length > 0 && // Cambia questa riga
         squeals.data.map(post => <PostCard key={post.id} {...post} />)}
 
