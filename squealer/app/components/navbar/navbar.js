@@ -59,6 +59,7 @@
                         </svg>
                         <p className='hidden md:block'>Your Profile</p>
                     </Link>
+
                     <Link href='/' className={nonActivePage}>
                         <svg xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -73,6 +74,7 @@
                         </svg>
                         <p className='hidden md:block'>Explore</p>
                     </Link>
+                    
                     <Link href='/' className={nonActivePage}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
