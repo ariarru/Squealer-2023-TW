@@ -10,15 +10,24 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 function LikeButton({ postsLiked, postsDisliked }) {
 
-    const router = useRouter();
-    const [active, setActive] = useState(false);
+    const [active, setActive] = useState();
+
+    // Aggiorna lo state 'active' quando 'hasLiked' cambia
+    useEffect(() => {
+        setActive(hasLiked);
+    }, [hasLiked]);
 
     const thumbAnimation = useSpring({
         transform: active ? 'scale(1.2)' : 'scale(1)',
         color: active ? 'green' : 'gray',
     });
 
-    useEffect(() => {
+    function clickLike() {
+        setActive(active => !active);
+        handleLikes(!active);
+    }
+
+    /*useEffect(() => {
         if (postsLiked.user_has_liked_tweet) {
             setActive(true)
         } else {
@@ -43,7 +52,7 @@ function LikeButton({ postsLiked, postsDisliked }) {
             router.refresh();
         }
     };
-
+*/
 
 
 
@@ -57,8 +66,7 @@ function LikeButton({ postsLiked, postsDisliked }) {
                 <FaThumbsUp />
             </animated.button>
         </button>
-
-    );
+    )
 }
 
 export default LikeButton;

@@ -8,16 +8,29 @@ import { removeLike, addDislike, removeDislike } from './reactions';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 
+function DisLikeButton({ hasDisliked, handleDislike, count, toDisable }) {
 
-function DisLikeButton({ postsLiked, postsDisliked }) {
+  const [active, setActive] = useState(hasDisliked);
 
-  const [active, setActive] = useState(false);
-  const router = useRouter();
+  // Aggiorna lo state 'active' quando 'hasDisliked' cambia
+  useEffect(() => {
+    setActive(hasDisliked);
+  }, [hasDisliked]);
+
 
   const thumbAnimation = useSpring({
     transform: active ? 'scale(1.2)' : 'scale(1)',
     color: active ? 'red' : 'gray',
   });
+
+  function clickDislikes() {
+    setActive(active => !active);
+    handleDislike(!active);
+  }
+
+  /*const router = useRouter();
+
+  
 
   useEffect(() => {
     if (postsDisliked.user_has_disliked_tweet) {
@@ -43,11 +56,10 @@ function DisLikeButton({ postsLiked, postsDisliked }) {
       }
       router.refresh();
     }
-  };
+  };*/
 
   return (
-
-    <button onClick={handleDislikes}>
+    <button onClick={() => clickDislikes()} disabled={toDisable}>
       <animated.button
         style={thumbAnimation}
         className="dislike-button"

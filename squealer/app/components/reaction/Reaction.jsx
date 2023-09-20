@@ -109,13 +109,18 @@ function Reaction({ post }) {
     }
 
     return (
-        <div className='w-full h-[30px] inline gap-2.5'>
+        <div className='w-full h-[30px] gap-2 flex items-center'>
             <LikeButton
-                active={likeSelected}
-                onClick={likeClickHandler} />
+                hasLiked={isLiked}
+                handleLikes={() => handleLike(!isLiked)}
+                count = {numLikes} 
+                toDisable={disable}/>
             <DislikeButton
-                active={dislikeSelected}
-                onClick={dislikeClickHandler} />
+                hasDisliked={isDisliked}
+                handleDislike={() => handleDislike(!isDisliked)} 
+                count={numDislikes}
+                toDisable={disable}/>
+            {/* inserisci views */}
         </div>
     );
 }
