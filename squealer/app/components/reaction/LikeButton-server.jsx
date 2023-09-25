@@ -1,12 +1,13 @@
-import LikeButton from "./LikeButton";
+import dynamic from 'next/dynamic';
 
-const LikeButtonServer = (hasLiked, handleLike, count, toDisable) => {
+const LikeButtonServer = (active, onClick) => {
+    const LikeButton = dynamic(() => import('../reaction/Reaction'), { ssr: false })
+
     return (
         <LikeButton
-            hasLiked={hasLiked}
-            handleLikes={() => handleLike(!hasLiked)}
-            count={count}
-            toDisable={toDisable} />
+            active={active}
+            onClick={onClick}
+        />
     )
 }
 

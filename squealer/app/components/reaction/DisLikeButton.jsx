@@ -1,73 +1,41 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
-import { useSpring, animated } from 'react-spring';
-import { FaThumbsDown } from 'react-icons/fa';
-import "@/styles/DisLikeButton.css";
-import { removeLike, addDislike, removeDislike } from './reactions';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react'
+import { useSpring, animated } from 'react-spring'
+import { FaThumbsDown } from 'react-icons/fa'
+import "@/styles/DisLikeButton.css"
 
-function DisLikeButton({ hasDisliked, handleDislike, count, toDisable }) {
+function DisLikeButton({ active, onClick }) {
 
-  const [active, setActive] = useState(hasDisliked);
+  const [isMounted, setIsMounted] = useState(false)
 
-  // Aggiorna lo state 'active' quando 'hasDisliked' cambia
-  useEffect(() => {
-    setActive(hasDisliked);
-  }, [hasDisliked]);
+  let isActiveState = active
 
+  useEffect(() => setIsMounted(true)), []
 
   const thumbAnimation = useSpring({
-    transform: active ? 'scale(1.2)' : 'scale(1)',
-    color: active ? 'red' : 'gray',
-  });
+    transform: isActiveState ? 'scale(1.2)' : 'scale(1)',
+    color: isActiveState ? 'red' : 'gray',
+  })
 
-  function clickDislikes() {
-    setActive(active => !active);
-    handleDislike(!active);
+  const handleClick = () => {
+    isActiveState = !isActiveState
+    onClick()
   }
 
-  /*const router = useRouter();
-
-  
-
-  useEffect(() => {
-    if (postsDisliked.user_has_disliked_tweet) {
-      setActive(true)
-    } else {
-      setActive(false)
-    }
-  }, [postsDisliked.user_has_disliked_tweet])
-
-  const handleDislikes = async () => {
-
-    const supabase = createClientComponentClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (user) {
-      if (postsDisliked.user_has_disliked_tweet) {
-        removeDislike()
-      } else if (postsLiked.user_has_liked_tweet) {
-        removeLike()
-        addDislike()
-      }
-      router.refresh();
-    }
-  };*/
-
+  if (!isMounted) {
+    return null
+  }
   return (
-    <button onClick={() => clickDislikes()} disabled={toDisable}>
-      <animated.button
-        style={thumbAnimation}
-        className="dislike-button"
-      >
-        <FaThumbsDown />
-      </animated.button>
-    </button>
-  );
+
+    <animated.button
+      onClick={handleClick}
+      style={thumbAnimation}
+      className="dislike-button"
+    >
+      <FaThumbsDown />
+    </animated.button>
+  )
 }
 
-export default DisLikeButton;
+export default DisLikeButton

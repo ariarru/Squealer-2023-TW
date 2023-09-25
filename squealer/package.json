@@ -32,7 +32,7 @@
     "prettier": "^3.0.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
-    "react-devtools": "^4.28.0",
+    "react-devtools": "^2.1.7",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
     "react-router-dom": "^6.15.0",

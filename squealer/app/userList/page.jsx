@@ -1,8 +1,8 @@
 const UserList = () => {
     return (
-        <layout>
+        <div className="">
             USERLIST
-        </layout>
+        </div>
     );
 }
 

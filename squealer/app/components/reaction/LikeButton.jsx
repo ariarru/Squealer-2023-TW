@@ -1,72 +1,39 @@
 "use client"
-import React, { useEffect, useState } from 'react';
-import { useSpring, animated } from 'react-spring';
-import { FaThumbsUp } from 'react-icons/fa';
-import "@/styles/LikeButton.css";
-import { addLike, removeLike, removeDislike } from './reactions';
-import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
+import React, { useState, useEffect } from 'react'
+import { useSpring, animated } from 'react-spring'
+import { FaThumbsUp } from 'react-icons/fa'
+import "@/styles/LikeButton.css"
 
-function LikeButton({ postsLiked, postsDisliked }) {
+function LikeButton({ active, onClick }) {
+    const [isMounted, setIsMounted] = useState(false)
+    const [isActive, setIsActive] = useState(active)
 
-    const [active, setActive] = useState();
+    useEffect(() => setIsMounted(true)), []
 
-    // Aggiorna lo state 'active' quando 'hasLiked' cambia
-    useEffect(() => {
-        setActive(hasLiked);
-    }, [hasLiked]);
 
     const thumbAnimation = useSpring({
-        transform: active ? 'scale(1.2)' : 'scale(1)',
-        color: active ? 'green' : 'gray',
-    });
+        transform: isActive ? 'scale(1.2)' : 'scale(1)',
+        color: isActive ? 'green' : 'gray',
+    })
 
-    function clickLike() {
-        setActive(active => !active);
-        handleLikes(!active);
+    const handleClick = () => {
+        setIsActive(!isActive)
+        onClick()
     }
 
-    /*useEffect(() => {
-        if (postsLiked.user_has_liked_tweet) {
-            setActive(true)
-        } else {
-            setActive(false)
-        }
-    }, [postsLiked.user_has_liked_tweet])
-
-    const handleLikes = async () => {
-
-        const supabase = createClientComponentClient();
-        const {
-            data: { user },
-        } = await supabase.auth.getUser();
-
-        if (user) {
-            if (postsLiked.user_has_liked_tweet) {
-                removeLike()
-            } else if (postsDisliked.user_has_disliked_tweet) {
-                removeDislike()
-                addLike()
-            }
-            router.refresh();
-        }
-    };
-*/
-
-
+    if (!isMounted) return null
 
     return (
 
-        <button onClick={handleLikes}>
-            <animated.button
-                style={thumbAnimation}
-                className="like-button"
-            >
-                <FaThumbsUp />
-            </animated.button>
-        </button>
+        <animated.button
+            onClick={handleClick}
+            style={thumbAnimation}
+            className="like-button"
+        >
+            <FaThumbsUp />
+        </animated.button>
     )
 }
 
-export default LikeButton;
+export default LikeButton

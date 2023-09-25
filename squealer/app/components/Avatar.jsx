@@ -1,21 +1,17 @@
-"use client"
+"use server"
 
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { useState } from 'react'
-import { uploadUserProfileImage } from '../../Helpers/user.js'
-import Preloader from './Preloader'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { uploadUserProfileImage } from '@/helper/user.js'
+import { cookies } from 'next/headers';
 
-export default function Avatar({ url, size, editable, onChange }) {
-    const supabase = createClientComponentClient()
-    const session = useSession()
-    const [isUploading, setIsUploading] = useState(false)
+export default async function Avatar({ url, size, editable, onChange }) {
+    const supabase = createServerComponentClient({ cookies })
+    const { data: { session } } = await supabase.auth.getSession()
 
     async function updateAvatar(ev) {
         try {
             const file = ev.target.files?.[0]
             if (file) {
-                setIsUploading(true)
                 await uploadUserProfileImage(
                     supabase,
                     session.user.id,
@@ -23,7 +19,6 @@ export default function Avatar({ url, size, editable, onChange }) {
                     'avatar',
                     file
                 )
-                setIsUploading(false)
                 if (onChange) onChange()
             }
         } catch (error) {
@@ -55,14 +50,6 @@ export default function Avatar({ url, size, editable, onChange }) {
                         alt='aggiungi una foto profilo'
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
-
-                    {isUploading && (
-                        <div className='absolute inset-0 flex items-center bg-white bg-opacity-50 rounded-full'>
-                            <div className='inline-block mx-auto'>
-                                <Preloader />
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
 

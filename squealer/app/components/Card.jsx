@@ -7,6 +7,6 @@ export default function Card({ children, noPadding, isNavbar }) {
         classes += ' fixed';
     }
     return (
-        <div className={`${classes}`}>{children}</  div>
+        <div className={`${classes}`}>{children}</div>
     )
 }

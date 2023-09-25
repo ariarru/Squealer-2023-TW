@@ -1,8 +1,8 @@
 const Explore = () => {
     return (
-        <layout>
+        <div className="">
             EXPLORE PAGE
-        </layout>
+        </div>
     );
 }
 

@@ -2,10 +2,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import AuthButtonServer from './auth/auth-components/auth-button-server'
 import { redirect } from 'next/navigation'
-// import NewTweet from './new-tweet'
 import PostCard from './components/media/PostCard'
-import LikeButton from './components/reaction/LikeButton'
-import DisLikeButton from './components/reaction/DisLikeButton'
 
 export default async function Home() {
   // Crea un oggetto supabase utilizzando createServerComponentClient e passa l'oggetto cookies come argomento
@@ -24,46 +21,26 @@ export default async function Home() {
   // Ottieni tutti i post con dettagli aggiuntivi come profili utente associati e conteggio dei "mi piace"
   const squeals = await supabase.from('posts').select('*')
 
-  // Per ogni post, verifica se l'utente ha messo "mi piace" al post
-  const postsLiked =
-    squeals?.data?.map(post => ({
-      ...post,
-      user_has_liked_post: !!post?.likes?.find(
-        like => like?.user_id === session.user.id
-      ),
-      likes: post?.likes?.length
-    })) ?? []
-
-  // Per ogni post nella variabile "squeal", verifica se l'utente ha messo "dislike" al post
-  const postsDisliked =
-    squeals?.data?.map(post => ({
-      ...post,
-      user_has_disliked_post: !!post?.dislikes?.find(
-        dislike => dislike?.user_id === session.user.id
-      ),
-      dislikes: post?.dislikes?.length
-    })) ?? []
-
   // Renderizza il componente Home con il pulsante di autenticazione, il componente per creare un nuovo tweet e la lista dei post
   return (
+    
     <layout>
-      <AuthButtonServer />
       {/* <NewTweet /> */}
       {squeals?.data?.length > 0 && // Cambia questa riga
         squeals.data.map(post => <PostCard key={post.id} {...post} />)}
 
       {/*  {squeals.data?.map((post) => (
         <div key={post.id}>
-          {post?.profiles?.name} {post?.profiles?.username}
-          {post?.content}
-          <LikeButton
-            postsLiked={postsLiked}
-            postsDisliked={postsDisliked}
-          />
-          <DisLikeButton
-            postsLiked={postsLiked}
-            postsDisliked={postsDisliked}
-          />
+        {post?.profiles?.name} {post?.profiles?.username}
+        {post?.content}
+        <LikeButton
+        postsLiked={postsLiked}
+        postsDisliked={postsDisliked}
+        />
+        <DisLikeButton
+        postsLiked={postsLiked}
+        postsDisliked={postsDisliked}
+        />
         </div>
       ))} */}
     </layout>
