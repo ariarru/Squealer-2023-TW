@@ -13,29 +13,8 @@ export default async function ReactionServer({ postId }) {
         redirect('/login')
     }
 
-    // const likes = await supabase
-    //     .from('likes')
-    //     .select()
-    //     .match({
-    //         post_id: postId,
-    //         user_id: session.user.id
-    //     })
-    //     .then((res) => {
-    //         if (res?.data?.length > 0) {
-    //         }
-    //     })
-
-    // const dislikes = await supabase
-    //     .from('dislikes')
-    //     .select()
-    //     .match({
-    //         post_id: postId,
-    //         user_id: session.user.id
-    //     })
-    //     .then((res) => {
-    //         if (res?.data?.length > 0) {
-    //         }
-    //     })
+    // qui andrà la query per il totale dei like e dislike 
+    // da passare alla componente Reaction.jsx
 
     return (
 

@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react'
 import LikeButton from './LikeButton'
 import DislikeButton from './DisLikeButton'
@@ -10,13 +11,15 @@ export default function Reaction({ postId, session }) {
 
     const [likeSelected, setLikeSelected] = useState(false)
     const [disLikeSelected, setDisLikeSelected] = useState(false)
+    
+    const router = useRouter()
 
     const supabase = createClientComponentClient({ cookies })
     const userId = session.user.id
 
     useEffect(() => {
         fetchReactions()
-    }),[]
+    }), []
 
     async function fetchReactions() {
         try {
@@ -55,7 +58,7 @@ export default function Reaction({ postId, session }) {
 
             if (disLikeSelected)
                 await removeDislike()
-
+            router.refresh()
             console.log('like cliccato')
         } catch (error) {
             console.log(error, 'Errore nel like')
