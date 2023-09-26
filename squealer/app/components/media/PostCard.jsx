@@ -1,4 +1,5 @@
 "use server"
+
 import React from 'react';
 import moment from 'moment';
 import Link from 'next/link';
@@ -6,8 +7,6 @@ import Card from '../Card';
 import Avatar from '../Avatar';
 import Media from './Media';
 import ReactionServer from '../reaction/Reaction-server';
-import { cookies } from 'next/headers';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default async function PostCard(
     {
@@ -18,10 +17,6 @@ export default async function PostCard(
         photos: uploads,
     }
 ) {
-    const supabase = createServerComponentClient({ cookies })
-    const { data: { session } } = await supabase.auth.getSession()
-
-    console.log(session);
     return (
         <Card>
             <div className='flex gap-3'>

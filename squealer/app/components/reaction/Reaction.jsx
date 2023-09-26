@@ -1,59 +1,59 @@
 "use client"
-import { useEffect } from 'react'
+
+import { useEffect, useState } from 'react'
 import LikeButton from './LikeButton'
 import DislikeButton from './DisLikeButton'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/navigation'
-import LikeButtonServer from './LikeButton-server'
+import { cookies } from 'next/navigation';
 
 export default function Reaction({ postId, session }) {
+
+    const [likeSelected, setLikeSelected] = useState(false)
+    const [disLikeSelected, setDisLikeSelected] = useState(false)
 
     const supabase = createClientComponentClient({ cookies })
     const userId = session.user.id
 
-    let likeSelectedState = false
-    let dislikeSelectedState = false
-
     useEffect(() => {
-        try {
-            // Controllo che ci siano già like o dislike
-            async function fetchReactions() {
-                await supabase
-                    .from('likes')
-                    .select()
-                    .match({
-                        post_id: postId,
-                        user_id: session.user.id
-                    })
-                    .then((result) => {
-                        result?.data?.length > 0 ? likeSelectedState = true : likeSelectedState = false
-                    })
+        fetchReactions()
+    }),[]
 
-                await supabase
-                    .from('dislikes')
-                    .select()
-                    .match({
-                        post_id: postId,
-                        user_id: session.user.id
-                    })
-                    .then((result) => {
-                        result?.data?.length > 0 ? dislikeSelectedState = true : dislikeSelectedState = false
-                    })
-            }
-            fetchReactions()
+    async function fetchReactions() {
+        try {
+            await supabase
+                .from('likes')
+                .select()
+                .match({
+                    post_id: postId,
+                    user_id: userId
+                })
+                .then((result) => {
+                    result?.data?.length > 0 ? setLikeSelected(true) : setLikeSelected(false)
+                })
+
+            await supabase
+                .from('dislikes')
+                .select()
+                .match({
+                    post_id: postId,
+                    user_id: userId
+                })
+                .then((result) => {
+                    result?.data?.length > 0 ? setDisLikeSelected(true) : setDisLikeSelected(false)
+                })
         } catch (error) {
             console.log(error + 'Errore nel fetch dei like e dislike')
         }
-    })
+    }
 
     const likeClickHandler = async () => {
         try {
-            if (likeSelectedState)
+            if (likeSelected)
                 await removeLike()
             else
                 await addLike()
 
-            if (dislikeSelectedState)
+            if (disLikeSelected)
                 await removeDislike()
 
             console.log('like cliccato')
@@ -64,12 +64,12 @@ export default function Reaction({ postId, session }) {
 
     const dislikeClickHandler = async () => {
         try {
-            if (dislikeSelectedState)
+            if (disLikeSelected)
                 await removeDislike()
             else
                 await addDislike()
 
-            if (likeSelectedState)
+            if (setLikeSelected())
                 await removeLike()
 
             console.log('dislike cliccato')
@@ -88,10 +88,11 @@ export default function Reaction({ postId, session }) {
                         user_id: userId
                     }])
                 .then(() => {
-                    likeSelectedState = !likeSelectedState
+                    setLikeSelected(!likeSelected)
                 })
         } catch (error) {
             console.log(error, 'Errore nel like')
+            console.log("errorino stupido spero");
         }
     }
 
@@ -105,7 +106,7 @@ export default function Reaction({ postId, session }) {
                         user_id: userId
                     }])
                 .then(() => {
-                    dislikeSelectedState = !dislikeSelectedState
+                    setDisLikeSelected(!disLikeSelected)
                 })
         } catch (error) {
             console.log(error, 'Errore nel like')
@@ -119,10 +120,10 @@ export default function Reaction({ postId, session }) {
                 .delete()
                 .match({
                     post_id: postId,
-                    user_id: session.user.id
+                    user_id: userId
                 })
                 .then(() => {
-                    likeSelectedState = !likeSelectedState
+                    setLikeSelected(!likeSelected)
                 })
         } catch (error) {
             console.log(error, 'Errore nel like')
@@ -136,10 +137,10 @@ export default function Reaction({ postId, session }) {
                 .delete()
                 .match({
                     post_id: postId,
-                    user_id: session.user.id
+                    user_id: userId
                 })
                 .then(() => {
-                    dislikeSelectedState = !dislikeSelectedState
+                    setDisLikeSelected(!disLikeSelected)
                 })
         } catch (error) {
             console.log(error, 'Errore nel like')
@@ -148,12 +149,17 @@ export default function Reaction({ postId, session }) {
 
     return (
         <div className='w-full h-[30px] flex inline gap-2.5'>
+
+            <div>Post number {postId}</div>
+            {/* è per comodità, poi lo togliamo */}
             <LikeButton
-                active={likeSelectedState}
+                isActive={likeSelected}
+                fetchReactions={fetchReactions}
                 onClick={likeClickHandler}
             />
             <DislikeButton
-                active={dislikeSelectedState}
+                isActive={disLikeSelected}
+                fetchReactions={fetchReactions}
                 onClick={dislikeClickHandler}
             />
         </div>

@@ -23,7 +23,7 @@ export default async function Home() {
 
   // Renderizza il componente Home con il pulsante di autenticazione, il componente per creare un nuovo tweet e la lista dei post
   return (
-    
+
     <layout>
       {/* <NewTweet /> */}
       {squeals?.data?.length > 0 && // Cambia questa riga

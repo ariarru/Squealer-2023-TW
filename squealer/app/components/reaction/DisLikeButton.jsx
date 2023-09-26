@@ -5,11 +5,10 @@ import { useSpring, animated } from 'react-spring'
 import { FaThumbsDown } from 'react-icons/fa'
 import "@/styles/DisLikeButton.css"
 
-function DisLikeButton({ active, onClick }) {
+function DisLikeButton({ isActive, onClick, fetchReactions }) {
 
   const [isMounted, setIsMounted] = useState(false)
-
-  let isActiveState = active
+  const [isActiveState, setIsActive] = useState(isActive)
 
   useEffect(() => setIsMounted(true)), []
 
@@ -19,13 +18,13 @@ function DisLikeButton({ active, onClick }) {
   })
 
   const handleClick = () => {
-    isActiveState = !isActiveState
+    setIsActive(!isActiveState)
     onClick()
+    fetchReactions()
   }
 
-  if (!isMounted) {
-    return null
-  }
+  if (!isMounted) return null
+
   return (
 
     <animated.button
