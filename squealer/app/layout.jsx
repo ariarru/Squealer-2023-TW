@@ -15,7 +15,6 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Suspense fallback={<Preloader />}>
           <div className='md:mx-[15%] 2xl:mx-[20%] flex mt-4 gap-9'>
-
             {children}
           </div>
         </Suspense>

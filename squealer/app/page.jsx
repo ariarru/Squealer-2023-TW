@@ -1,9 +1,7 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import AuthButtonServer from './auth/auth-components/auth-button-server'
 import { redirect } from 'next/navigation'
 import PostCard from './components/media/PostCard'
-import ErrorBoundaryServer from './components/ErrorBoundary-server'
 
 export default async function Home() {
   // Crea un oggetto supabase utilizzando createServerComponentClient e passa l'oggetto cookies come argomento
@@ -25,12 +23,8 @@ export default async function Home() {
   // Renderizza il componente Home con il pulsante di autenticazione, il componente per creare un nuovo tweet e la lista dei post
   return (
     <layout>
-      <ErrorBoundaryServer>
-
-        {squeals?.data?.length > 0 && // Cambia questa riga
-          squeals.data.map(post => <PostCard key={post.id} {...post} />)}
-
-      </ErrorBoundaryServer>
+      {squeals?.data?.length > 0 && // Cambia questa riga
+        squeals.data.map(post => <PostCard key={post.id} {...post} />)}
     </layout>
   )
 }
