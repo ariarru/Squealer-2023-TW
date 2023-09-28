@@ -11,13 +11,22 @@ export default function Reaction({ postId, session }) {
 
     const [likeSelected, setLikeSelected] = useState(false)
     const [disLikeSelected, setDisLikeSelected] = useState(false)
+    const [isMounted, setIsMounted] = useState(false)
 
     const supabase = createClientComponentClient({ cookies })
     const userId = session.user.id
 
-    useEffect(() => {
-        fetchReactions()
-    }), []
+    useEffect(() => { setIsMounted(true) }, [])
+
+    if (!isMounted) {
+        return (
+            <>
+                <LikeButton isActive={isMounted} />
+                <DislikeButton isActive={isMounted} />
+            </>
+        )
+    }
+
 
     async function fetchReactions() {
         try {
